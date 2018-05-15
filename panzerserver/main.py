@@ -2,8 +2,8 @@ from concurrent import futures
 import time
 import grpc
 
-from tigerserver import panzer_pb2_grpc, panzer
-from tigerserver.rpc_impl import PanzerServicer
+from panzerserver import panzer_pb2_grpc, panzer
+from panzerserver.rpc_impl import PanzerServicer
 
 
 def main():

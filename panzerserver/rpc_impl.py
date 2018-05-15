@@ -1,4 +1,4 @@
-from tigerserver import panzer_pb2, panzer_pb2_grpc
+from panzerserver import panzer_pb2, panzer_pb2_grpc
 
 
 class PanzerServicer(panzer_pb2_grpc.PanzerServicer):

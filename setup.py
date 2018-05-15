@@ -5,7 +5,7 @@ import subprocess
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 PROTO_DIR = os.path.join(HERE, "protos")
-PACKAGE_DIR = os.path.join(HERE, "tigerserver")
+PACKAGE_DIR = os.path.join(HERE, "panzerserver")
 
 def generate_proto():
     # https://grpc.io/docs/tutorials/basic/python.html#generating-client-and-server-code
@@ -23,9 +23,9 @@ def generate_proto():
 
 
 setup(
-    name='tigerserver',
+    name='panzerserver',
     version='',
-    packages=['tigerserver'],
+    packages=['panzerserver'],
     url='',
     license='',
     author='xeno14',
