@@ -1,7 +1,6 @@
 import time
-import threading
 import enum
-import functools
+from abc import ABCMeta, abstractmethod
 
 try:
     from RPi import GPIO
@@ -14,6 +13,13 @@ except ImportError:
         fake_rpi.toggle_print(p)
 
 
+class Component(metaclass=ABCMeta):
+
+    @abstractmethod
+    def initialize(self):
+        pass
+
+
 class DriveDirection(enum.Enum):
     STOP = 0
     FORWARD = 1
@@ -21,7 +27,7 @@ class DriveDirection(enum.Enum):
     BRAKE = 3
 
 
-class Wheel(object):
+class Wheel(Component):
 
     def __init__(self, channel1, channel2, channel_pwm=None):
         self.channel1 = channel1
@@ -91,7 +97,6 @@ class Controller(object):
 
     def touch(self):
         """Update last updated time
-        :return:
         """
         self.last_updated = time.time()
 
@@ -134,7 +139,8 @@ if __name__ == '__main__':
     import concurrent.futures
 
     con = Controller(
-        1, 2, None, 3, 4, None
+        1, 2, None,  # left wheel
+        3, 4, None,  # right wheel
     )
     con.initialize()
 
