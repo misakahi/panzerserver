@@ -1,9 +1,9 @@
 import time
 import enum
-from abc import ABCMeta, abstractmethod
 
 try:
     from RPi import GPIO
+    GPIO.setmode(GPIO.BOARD)  # Use board number
 except ImportError:
     import fake_rpi
     from fake_rpi.RPi import GPIO
@@ -13,11 +13,10 @@ except ImportError:
         fake_rpi.toggle_print(p)
 
 
-class Component(metaclass=ABCMeta):
+class Component(object):
 
-    @abstractmethod
     def initialize(self):
-        pass
+        raise NotImplementedError
 
 
 class DriveDirection(enum.Enum):
@@ -35,6 +34,7 @@ class Wheel(Component):
         self.channel_pwm = channel_pwm
 
     def initialize(self):
+        print("setup GPIO OUT %d %d" % (self.channel1, self.channel2))
         GPIO.setup(self.channel1, GPIO.OUT)
         GPIO.setup(self.channel2, GPIO.OUT)
 
@@ -83,10 +83,18 @@ class Controller(object):
         self.r_wheel = Wheel(r_channel1, r_channel2, r_pwm)
 
         self.last_updated = 0
+        self.is_init = False
 
     def initialize(self):
         self.l_wheel.initialize()
         self.r_wheel.initialize()
+        self.is_init = True
+
+    def is_initialized(self):
+        return self.is_init
+
+    def cleanup(self):
+        GPIO.cleanup()
 
     def stop_all(self):
         print("stop all")
@@ -139,8 +147,8 @@ if __name__ == '__main__':
     import concurrent.futures
 
     con = Controller(
-        1, 2, None,  # left wheel
-        3, 4, None,  # right wheel
+        11, 13, None,  # left wheel
+        15, 16, None,  # right wheel
     )
     con.initialize()
 
@@ -149,3 +157,4 @@ if __name__ == '__main__':
 
     print("go")
     con.drive(1, 1)
+    GPIO.cleanup()

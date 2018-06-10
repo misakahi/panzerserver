@@ -67,7 +67,7 @@ setup(
     author_email='',
     description='',
     install_requires=[
-        "grpcio",
+        "grpcio==1.11.0",
         "grpcio-tools",
         "fake-rpi",
         "pyyaml",
