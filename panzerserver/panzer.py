@@ -9,6 +9,7 @@ except ImportError:
     import fake_rpi
     from fake_rpi.RPi import GPIO
 
+
     def toggle_fake_print(p):
         fake_rpi.toggle_print(p)
 
@@ -64,9 +65,8 @@ class Wheel(object):
 
 
 class Controller(object):
-
-    WATCH_INTERVAL = 1      # msec
-    WATCH_THRESHOLD = 3     # msec
+    WATCH_INTERVAL = 1  # msec
+    WATCH_THRESHOLD = 3  # msec
 
     def __init__(self,
                  l_channel1, l_channel2, l_pwm,
@@ -83,6 +83,7 @@ class Controller(object):
         self.r_wheel.initialize()
 
     def stop_all(self):
+        print("stop all")
         self.l_wheel.stop()
         self.r_wheel.stop()
 
@@ -101,11 +102,15 @@ class Controller(object):
 
     def watch_loop(self):
         self.touch()
+        is_active = True
         while True:
-            delta = time.time() - self.last_updated
-            if delta > self.WATCH_THRESHOLD / 1e3:
+            delta = (time.time() - self.last_updated) * 1e3  # milliseconds
+            if is_active and delta > self.WATCH_THRESHOLD:
                 self.stop_all()
-            time.sleep(self.WATCH_INTERVAL / 1e3)
+                is_active = False
+            elif delta <= self.WATCH_INTERVAL:
+                is_active = True
+            time.sleep(self.WATCH_INTERVAL / 1e3)  # seconds
 
     @staticmethod
     def level_to_direction(level):
@@ -127,6 +132,7 @@ class Controller(object):
 
 if __name__ == '__main__':
     import concurrent.futures
+
     con = Controller(
         1, 2, None, 3, 4, None
     )
@@ -137,5 +143,3 @@ if __name__ == '__main__':
 
     print("go")
     con.drive(1, 1)
-
-
