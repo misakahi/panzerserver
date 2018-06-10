@@ -70,6 +70,7 @@ setup(
         "grpcio",
         "grpcio-tools",
         "fake-rpi",
+        "pyyaml",
     ],
     cmdclass={"install": Install, "build_py": BuildPy}
 )

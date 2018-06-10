@@ -1,0 +1,3 @@
+components:
+  left_wheel: [1, 2, 0]
+  right_wheel: [3, 4, 0]

@@ -2,24 +2,35 @@ import argparse
 from concurrent import futures
 import time
 import grpc
+import pprint
 
 from panzerserver import panzer_pb2_grpc, panzer
 from panzerserver.rpc_impl import PanzerServicer
+import panzerserver.config
 
 
 def main():
     parser = argparse.ArgumentParser(description='Panzer Vor!!')
     parser.add_argument('--port', type=int, default=50051, help='port number (default: 50051)')
+    parser.add_argument('--config', type=str, default=None, help='config file (optional)')
     args = parser.parse_args()
 
     # Setup thread pool
     executor = futures.ThreadPoolExecutor(max_workers=10)
 
-    # Setup contoller
+    # Load config
+    if args.config is None:
+        config = panzerserver.config.DEFAULT_CONFIG
+    else:
+        config = panzerserver.config.load_config(args.config)
+    print("config loaded:")
+    pprint.pprint(config)
+
+    # Setup controller
     print("setting up controller")
     controller = panzer.Controller(
-        1, 2, None,  # left wheel
-        4, 5, None,  # right wheel
+        *config["components"]["left_wheel"],
+        *config["components"]["right_wheel"],
     )
     controller.watch_configure(1000 / 3, 1000)  # remove me later
     executor.submit(controller.watch_loop)  # start watch loop
