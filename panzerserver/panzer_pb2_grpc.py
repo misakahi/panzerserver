@@ -19,6 +19,11 @@ class PanzerStub(object):
         request_serializer=panzer__pb2.DriveRequest.SerializeToString,
         response_deserializer=panzer__pb2.DriveResponse.FromString,
         )
+    self.Control = channel.unary_unary(
+        '/panzer.Panzer/Control',
+        request_serializer=panzer__pb2.ControlRequest.SerializeToString,
+        response_deserializer=panzer__pb2.ControlResponse.FromString,
+        )
 
 
 class PanzerServicer(object):
@@ -32,6 +37,13 @@ class PanzerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def Control(self, request, context):
+    """Control components in bulk
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_PanzerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -39,6 +51,11 @@ def add_PanzerServicer_to_server(servicer, server):
           servicer.Drive,
           request_deserializer=panzer__pb2.DriveRequest.FromString,
           response_serializer=panzer__pb2.DriveResponse.SerializeToString,
+      ),
+      'Control': grpc.unary_unary_rpc_method_handler(
+          servicer.Control,
+          request_deserializer=panzer__pb2.ControlRequest.FromString,
+          response_serializer=panzer__pb2.ControlResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

@@ -9,6 +9,11 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
         self.controller = controller
 
     def Drive(self, request, context):
-        self.controller.drive(request.l_level, request.r_level)
+        self.controller.drive(request.left_level, request.right_level)
+        print(request)
+        return panzer_pb2.DriveResponse(success=True)
+
+    def Control(self, request, context):
+        self.Drive(request.driveRequest, context)
         print(request)
         return panzer_pb2.DriveResponse(success=True)

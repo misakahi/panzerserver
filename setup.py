@@ -1,7 +1,7 @@
-from setuptools import setup
-from setuptools.command.build_py import build_py
-from setuptools.command.install import install
+from setuptools import setup, Command
 import os.path
+import glob
+import re
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 PROTO_DIR = os.path.join(HERE, "protos")
@@ -12,12 +12,12 @@ def generate_proto():
     import grpc_tools.protoc
 
     # https://grpc.io/docs/tutorials/basic/python.html#generating-client-and-server-code
-    # proto_files = [os.path.basename(proto_file) for proto_file in glob.glob(os.path.join(PROTO_DIR, "*.proto"))]
+    # proto_files = [os.path.basename(proto_file) for proto_file in glob.glob(os.path.join(PROTO_DIR, "*.protos"))]
     command_arguments = [
-        "",                     # dummy
-        "--proto_path",         PROTO_DIR,
-        "--python_out",         PACKAGE_DIR,
-        "--grpc_python_out",    PACKAGE_DIR,
+        "",  # dummy
+        "--proto_path", PROTO_DIR,
+        "--python_out", PACKAGE_DIR,
+        "--grpc_python_out", PACKAGE_DIR,
         os.path.join(PROTO_DIR, "panzer.proto")
     ]
     print("Building protoc: " + "python -m grpc_tools.protoc " + " ".join(command_arguments))
@@ -26,40 +26,32 @@ def generate_proto():
     if result != 0:
         raise RuntimeError("grpc_tools.protoc exited with {}".format(result))
 
+    # hack gRPC generated code
+    for grpc_code in glob.glob(os.path.join(PACKAGE_DIR, "*pb2_grpc.py")):
+        with open(grpc_code, "r") as f:
+            code = f.read()
+            code = re.sub(r"import (.+_pb2) as (.+__pb2)", r"from . import \1 as \2", code)
+        with open(grpc_code, "w") as f:
+            f.write(code)
 
-class BuildPy(build_py):
 
-    def __init__(self, dist):
-        super().__init__(dist)
-        self.my_outputs = []
+class Protoc(Command):
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
 
     def run(self):
         generate_proto()
-        super().run()
-        self.my_outputs = [ os.path.join(PACKAGE_DIR, p) for p in ["panzer_pb2.py", "panzer_pb2_grpc.py"]]
-
-    def get_outputs(self):
-        outputs = build_py.get_outputs(self)
-        outputs.extend(self.my_outputs)
-        return outputs
-
-
-class Install(install):
-    """Customized install command
-
-    https://blog.niteo.co/setuptools-run-custom-code-in-setup-py/
-    """
-
-    def run(self):
-        self.run_command("build_py")
-        print("custom install")
-        generate_proto()
-        install.run(self)
 
 
 setup(
     name='panzerserver',
-    version='',
+    version='0.0.1',
     packages=['panzerserver'],
     url='',
     license='',
@@ -72,5 +64,5 @@ setup(
         "fake-rpi",
         "pyyaml",
     ],
-    cmdclass={"install": Install, "build_py": BuildPy}
+    cmdclass={"protoc": Protoc}
 )
