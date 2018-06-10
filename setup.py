@@ -36,7 +36,7 @@ class BuildPy(build_py):
     def run(self):
         generate_proto()
         super().run()
-        self.my_outputs = ["panzer_pb2.py", "panzer_pb2_grpc.py"]
+        self.my_outputs = [ os.path.join(PACKAGE_DIR, p) for p in ["panzer_pb2.py", "panzer_pb2_grpc.py"]]
 
     def get_outputs(self):
         outputs = build_py.get_outputs(self)

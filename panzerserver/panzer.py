@@ -132,8 +132,8 @@ if __name__ == '__main__':
     )
     con.initialize()
 
-    executer = concurrent.futures.ThreadPoolExecutor()
-    executer.submit(con.watch_loop)
+    executor = concurrent.futures.ThreadPoolExecutor()
+    executor.submit(con.watch_loop)
 
     print("go")
     con.drive(1, 1)
