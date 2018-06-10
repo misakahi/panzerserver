@@ -32,6 +32,7 @@ def main():
         *config["components"]["left_wheel"],
         *config["components"]["right_wheel"],
     )
+    controller.initialize()
     controller.watch_configure(1000 / 3, 1000)  # remove me later
     executor.submit(controller.watch_loop)  # start watch loop
 
