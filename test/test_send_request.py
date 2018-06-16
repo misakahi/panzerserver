@@ -19,3 +19,5 @@ for i in range(10):
     response = stub.Control(request)
     print(response)
     time.sleep(333/1e3)
+
+    pong = stub.SendPing(panzerserver.panzer_pb2.Ping())

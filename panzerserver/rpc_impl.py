@@ -17,3 +17,7 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
         self.Drive(request.driveRequest, context)
         print(request)
         return panzer_pb2.DriveResponse(success=True)
+
+    def SendPing(self, request, context):
+        return panzer_pb2.Pong()
+

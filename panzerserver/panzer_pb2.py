@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='panzer.proto',
   package='panzer',
   syntax='proto3',
-  serialized_pb=_b('\n\x0cpanzer.proto\x12\x06panzer\"7\n\x0c\x44riveRequest\x12\x12\n\nleft_level\x18\x01 \x01(\x01\x12\x13\n\x0bright_level\x18\x02 \x01(\x01\" \n\rDriveResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"<\n\x0e\x43ontrolRequest\x12*\n\x0c\x64riveRequest\x18\x01 \x01(\x0b\x32\x14.panzer.DriveRequest\"\"\n\x0f\x43ontrolResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32~\n\x06Panzer\x12\x36\n\x05\x44rive\x12\x14.panzer.DriveRequest\x1a\x15.panzer.DriveResponse\"\x00\x12<\n\x07\x43ontrol\x12\x16.panzer.ControlRequest\x1a\x17.panzer.ControlResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0cpanzer.proto\x12\x06panzer\"7\n\x0c\x44riveRequest\x12\x12\n\nleft_level\x18\x01 \x01(\x01\x12\x13\n\x0bright_level\x18\x02 \x01(\x01\" \n\rDriveResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"<\n\x0e\x43ontrolRequest\x12*\n\x0c\x64riveRequest\x18\x01 \x01(\x0b\x32\x14.panzer.DriveRequest\"\"\n\x0f\x43ontrolResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x14\n\x04Ping\x12\x0c\n\x04ping\x18\x01 \x01(\t\"\x14\n\x04Pong\x12\x0c\n\x04pong\x18\x01 \x01(\t2\xa8\x01\n\x06Panzer\x12\x36\n\x05\x44rive\x12\x14.panzer.DriveRequest\x1a\x15.panzer.DriveResponse\"\x00\x12<\n\x07\x43ontrol\x12\x16.panzer.ControlRequest\x1a\x17.panzer.ControlResponse\"\x00\x12(\n\x08SendPing\x12\x0c.panzer.Ping\x1a\x0c.panzer.Pong\"\x00\x62\x06proto3')
 )
 
 
@@ -155,11 +155,75 @@ _CONTROLRESPONSE = _descriptor.Descriptor(
   serialized_end=211,
 )
 
+
+_PING = _descriptor.Descriptor(
+  name='Ping',
+  full_name='panzer.Ping',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ping', full_name='panzer.Ping.ping', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=213,
+  serialized_end=233,
+)
+
+
+_PONG = _descriptor.Descriptor(
+  name='Pong',
+  full_name='panzer.Pong',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pong', full_name='panzer.Pong.pong', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=235,
+  serialized_end=255,
+)
+
 _CONTROLREQUEST.fields_by_name['driveRequest'].message_type = _DRIVEREQUEST
 DESCRIPTOR.message_types_by_name['DriveRequest'] = _DRIVEREQUEST
 DESCRIPTOR.message_types_by_name['DriveResponse'] = _DRIVERESPONSE
 DESCRIPTOR.message_types_by_name['ControlRequest'] = _CONTROLREQUEST
 DESCRIPTOR.message_types_by_name['ControlResponse'] = _CONTROLRESPONSE
+DESCRIPTOR.message_types_by_name['Ping'] = _PING
+DESCRIPTOR.message_types_by_name['Pong'] = _PONG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 DriveRequest = _reflection.GeneratedProtocolMessageType('DriveRequest', (_message.Message,), dict(
@@ -190,6 +254,20 @@ ControlResponse = _reflection.GeneratedProtocolMessageType('ControlResponse', (_
   ))
 _sym_db.RegisterMessage(ControlResponse)
 
+Ping = _reflection.GeneratedProtocolMessageType('Ping', (_message.Message,), dict(
+  DESCRIPTOR = _PING,
+  __module__ = 'panzer_pb2'
+  # @@protoc_insertion_point(class_scope:panzer.Ping)
+  ))
+_sym_db.RegisterMessage(Ping)
+
+Pong = _reflection.GeneratedProtocolMessageType('Pong', (_message.Message,), dict(
+  DESCRIPTOR = _PONG,
+  __module__ = 'panzer_pb2'
+  # @@protoc_insertion_point(class_scope:panzer.Pong)
+  ))
+_sym_db.RegisterMessage(Pong)
+
 
 
 _PANZER = _descriptor.ServiceDescriptor(
@@ -198,8 +276,8 @@ _PANZER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=213,
-  serialized_end=339,
+  serialized_start=258,
+  serialized_end=426,
   methods=[
   _descriptor.MethodDescriptor(
     name='Drive',
@@ -217,6 +295,15 @@ _PANZER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CONTROLREQUEST,
     output_type=_CONTROLRESPONSE,
+    options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='SendPing',
+    full_name='panzer.Panzer.SendPing',
+    index=2,
+    containing_service=None,
+    input_type=_PING,
+    output_type=_PONG,
     options=None,
   ),
 ])

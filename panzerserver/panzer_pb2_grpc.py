@@ -24,6 +24,11 @@ class PanzerStub(object):
         request_serializer=panzer__pb2.ControlRequest.SerializeToString,
         response_deserializer=panzer__pb2.ControlResponse.FromString,
         )
+    self.SendPing = channel.unary_unary(
+        '/panzer.Panzer/SendPing',
+        request_serializer=panzer__pb2.Ping.SerializeToString,
+        response_deserializer=panzer__pb2.Pong.FromString,
+        )
 
 
 class PanzerServicer(object):
@@ -44,6 +49,13 @@ class PanzerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def SendPing(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_PanzerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -56,6 +68,11 @@ def add_PanzerServicer_to_server(servicer, server):
           servicer.Control,
           request_deserializer=panzer__pb2.ControlRequest.FromString,
           response_serializer=panzer__pb2.ControlResponse.SerializeToString,
+      ),
+      'SendPing': grpc.unary_unary_rpc_method_handler(
+          servicer.SendPing,
+          request_deserializer=panzer__pb2.Ping.FromString,
+          response_serializer=panzer__pb2.Pong.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
