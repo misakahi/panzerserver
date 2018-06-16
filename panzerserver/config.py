@@ -5,7 +5,8 @@ DEFAULT_CONFIG = {
     "components": {
         "left_wheel": [11, 13, 0],
         "right_wheel": [15, 16, 0],
-    }
+    },
+    "watch_threshold": 50
 }
 
 
@@ -35,6 +36,7 @@ def load_config(file):
 
 
 if __name__ == '__main__':
+    # testing overrides_dict
     d = {
         "a": [1, 2],
         "b": {

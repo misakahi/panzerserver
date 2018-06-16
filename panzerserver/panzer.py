@@ -109,8 +109,8 @@ class Controller(object):
         self.last_updated = time.time()
 
     @classmethod
-    def watch_configure(cls, interval, threshold):
-        cls.WATCH_INTERVAL = interval
+    def watch_configure(cls, threshold):
+        cls.WATCH_INTERVAL = threshold / 3
         cls.WATCH_THRESHOLD = threshold
 
     def watch_loop(self):
