@@ -33,6 +33,7 @@ class Wheel(Component):
         self.channel2 = channel2
         self.channel_pwm = channel_pwm
         self.pwm = None
+        self.is_pwm_active = False
 
     def initialize(self):
         print("setup GPIO OUT %d %d" % (self.channel1, self.channel2))
@@ -51,7 +52,12 @@ class Wheel(Component):
         duty = int(level * 100)
         duty = min(duty, 100)
         duty = max(duty, 0)
-        self.pwm.start(duty)
+
+        if not self.is_pwm_active:
+            self.is_pwm_active = True
+            self.pwm.start(duty)
+        else:
+            self.pwm.ChangeDutyCycle(duty)
 
     def forward(self, level):
         GPIO.output(self.channel1, GPIO.HIGH)
@@ -63,7 +69,7 @@ class Wheel(Component):
         GPIO.output(self.channel2, GPIO.HIGH)
         self.pwm_start(level)
 
-    def brake(self, level):
+    def brake(self, level=None):
         GPIO.output(self.channel1, GPIO.HIGH)
         GPIO.output(self.channel2, GPIO.HIGH)
 
@@ -71,6 +77,7 @@ class Wheel(Component):
         GPIO.output(self.channel1, GPIO.LOW)
         GPIO.output(self.channel2, GPIO.LOW)
         self.pwm.stop()
+        self.is_pwm_active = False
 
     def drive(self, direction, level=1.0):
         level = abs(level)

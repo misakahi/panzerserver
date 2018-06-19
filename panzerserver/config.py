@@ -6,7 +6,7 @@ DEFAULT_CONFIG = {
         "left_wheel": [11, 12, 13],
         "right_wheel": [15, 16, 18],
     },
-    "watch_threshold": 50
+    "watch_threshold": 100
 }
 
 
