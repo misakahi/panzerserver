@@ -19,6 +19,11 @@ class PanzerStub(object):
         request_serializer=panzer__pb2.DriveRequest.SerializeToString,
         response_deserializer=panzer__pb2.DriveResponse.FromString,
         )
+    self.MoveTurret = channel.unary_unary(
+        '/panzer.Panzer/MoveTurret',
+        request_serializer=panzer__pb2.MoveTurretRequest.SerializeToString,
+        response_deserializer=panzer__pb2.MoveTurretResponse.FromString,
+        )
     self.Control = channel.unary_unary(
         '/panzer.Panzer/Control',
         request_serializer=panzer__pb2.ControlRequest.SerializeToString,
@@ -36,6 +41,13 @@ class PanzerServicer(object):
   pass
 
   def Drive(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def MoveTurret(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -63,6 +75,11 @@ def add_PanzerServicer_to_server(servicer, server):
           servicer.Drive,
           request_deserializer=panzer__pb2.DriveRequest.FromString,
           response_serializer=panzer__pb2.DriveResponse.SerializeToString,
+      ),
+      'MoveTurret': grpc.unary_unary_rpc_method_handler(
+          servicer.MoveTurret,
+          request_deserializer=panzer__pb2.MoveTurretRequest.FromString,
+          response_serializer=panzer__pb2.MoveTurretResponse.SerializeToString,
       ),
       'Control': grpc.unary_unary_rpc_method_handler(
           servicer.Control,
