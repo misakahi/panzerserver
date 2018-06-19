@@ -32,19 +32,34 @@ class Wheel(Component):
         self.channel1 = channel1
         self.channel2 = channel2
         self.channel_pwm = channel_pwm
+        self.pwm = GPIO.PWM(self.channel_pwm, 1000)  # TODO check frequency
 
     def initialize(self):
         print("setup GPIO OUT %d %d" % (self.channel1, self.channel2))
         GPIO.setup(self.channel1, GPIO.OUT)
         GPIO.setup(self.channel2, GPIO.OUT)
 
+    def pwm_start(self, level):
+        """Start PWM
+
+        :param level: duty ratio [0, 1.0]
+        :return: None
+        """
+        # set duty to 0..100
+        duty = int(level * 100)
+        duty = min(duty, 100)
+        duty = max(duty, 0)
+        self.pwm.start(duty)
+
     def forward(self, level):
         GPIO.output(self.channel1, GPIO.HIGH)
         GPIO.output(self.channel2, GPIO.LOW)
+        self.pwm_start(level)
 
     def backward(self, level):
         GPIO.output(self.channel1, GPIO.LOW)
         GPIO.output(self.channel2, GPIO.HIGH)
+        self.pwm_start(level)
 
     def brake(self, level):
         GPIO.output(self.channel1, GPIO.HIGH)
@@ -53,6 +68,7 @@ class Wheel(Component):
     def stop(self):
         GPIO.output(self.channel1, GPIO.LOW)
         GPIO.output(self.channel2, GPIO.LOW)
+        self.pwm.stop()
 
     def drive(self, direction, level=1.0):
         level = abs(level)

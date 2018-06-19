@@ -3,8 +3,8 @@ import yaml
 
 DEFAULT_CONFIG = {
     "components": {
-        "left_wheel": [11, 13, 0],
-        "right_wheel": [15, 16, 0],
+        "left_wheel": [11, 12, 13],
+        "right_wheel": [15, 16, 18],
     },
     "watch_threshold": 50
 }
