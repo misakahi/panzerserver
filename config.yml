@@ -1,3 +1,5 @@
 components:
-  left_wheel: [11, 13, 0]
-  right_wheel: [15, 16, 0]
+  left_wheel: [5, 22, null]
+  right_wheel: [6, 22, null]
+  turret: [27, 17, null, null]
+watch_threshold: 200

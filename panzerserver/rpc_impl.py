@@ -9,13 +9,23 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
         self.controller = controller
 
     def Drive(self, request, context):
-        self.controller.drive(request.left_level, request.right_level)
         print(request)
+        self.controller.drive(request.left_level, request.right_level)
+
         return panzer_pb2.DriveResponse(success=True)
 
-    def Control(self, request, context):
-        self.Drive(request.driveRequest, context)
+    def MoveTurret(self, request, context):
         print(request)
+        self.controller.turret.rotate(request.rotation)
+        self.controller.turret.updown(request.updown)
+
+        return panzer_pb2.MoveTurretResponse(success=True)
+
+    def Control(self, request, context):
+        print(request)
+        self.Drive(request.driveRequest, context)
+        self.MoveTurret(request.moveTurretRequest, context)
+
         return panzer_pb2.DriveResponse(success=True)
 
     def SendPing(self, request, context):
