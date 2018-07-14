@@ -52,8 +52,8 @@ class Wheel(Component):
         print("setup GPIO OUT %d %d" % (self.channel1, self.channel2))
         GPIO.setup(self.channel1, GPIO.OUT)
         GPIO.setup(self.channel2, GPIO.OUT)
-        GPIO.setup(self.channel_pwm, GPIO.OUT)
         if self.channel_pwm is not None:
+            GPIO.setup(self.channel_pwm, GPIO.OUT)
             self.pwm = GPIO.PWM(self.channel_pwm, 1000)  # TODO check frequency
 
     def pwm_start(self, level):
