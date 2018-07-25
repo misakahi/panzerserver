@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='panzer.proto',
   package='panzer',
   syntax='proto3',
-  serialized_pb=_b('\n\x0cpanzer.proto\x12\x06panzer\"7\n\x0c\x44riveRequest\x12\x12\n\nleft_level\x18\x01 \x01(\x01\x12\x13\n\x0bright_level\x18\x02 \x01(\x01\" \n\rDriveResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"<\n\x0e\x43ontrolRequest\x12*\n\x0c\x64riveRequest\x18\x01 \x01(\x0b\x32\x14.panzer.DriveRequest\"\"\n\x0f\x43ontrolResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x14\n\x04Ping\x12\x0c\n\x04ping\x18\x01 \x01(\t\"\x14\n\x04Pong\x12\x0c\n\x04pong\x18\x01 \x01(\t2\xa8\x01\n\x06Panzer\x12\x36\n\x05\x44rive\x12\x14.panzer.DriveRequest\x1a\x15.panzer.DriveResponse\"\x00\x12<\n\x07\x43ontrol\x12\x16.panzer.ControlRequest\x1a\x17.panzer.ControlResponse\"\x00\x12(\n\x08SendPing\x12\x0c.panzer.Ping\x1a\x0c.panzer.Pong\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0cpanzer.proto\x12\x06panzer\"7\n\x0c\x44riveRequest\x12\x12\n\nleft_level\x18\x01 \x01(\x01\x12\x13\n\x0bright_level\x18\x02 \x01(\x01\" \n\rDriveResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"5\n\x11MoveTurretRequest\x12\x10\n\x08rotation\x18\x01 \x01(\x01\x12\x0e\n\x06updown\x18\x02 \x01(\x01\"%\n\x12MoveTurretResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"r\n\x0e\x43ontrolRequest\x12*\n\x0c\x64riveRequest\x18\x01 \x01(\x0b\x32\x14.panzer.DriveRequest\x12\x34\n\x11moveTurretRequest\x18\x02 \x01(\x0b\x32\x19.panzer.MoveTurretRequest\"\"\n\x0f\x43ontrolResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x14\n\x04Ping\x12\x0c\n\x04ping\x18\x01 \x01(\t\"\x14\n\x04Pong\x12\x0c\n\x04pong\x18\x01 \x01(\t2\xef\x01\n\x06Panzer\x12\x36\n\x05\x44rive\x12\x14.panzer.DriveRequest\x1a\x15.panzer.DriveResponse\"\x00\x12\x45\n\nMoveTurret\x12\x19.panzer.MoveTurretRequest\x1a\x1a.panzer.MoveTurretResponse\"\x00\x12<\n\x07\x43ontrol\x12\x16.panzer.ControlRequest\x1a\x17.panzer.ControlResponse\"\x00\x12(\n\x08SendPing\x12\x0c.panzer.Ping\x1a\x0c.panzer.Pong\"\x00\x62\x06proto3')
 )
 
 
@@ -94,17 +94,24 @@ _DRIVERESPONSE = _descriptor.Descriptor(
 )
 
 
-_CONTROLREQUEST = _descriptor.Descriptor(
-  name='ControlRequest',
-  full_name='panzer.ControlRequest',
+_MOVETURRETREQUEST = _descriptor.Descriptor(
+  name='MoveTurretRequest',
+  full_name='panzer.MoveTurretRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='driveRequest', full_name='panzer.ControlRequest.driveRequest', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='rotation', full_name='panzer.MoveTurretRequest.rotation', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='updown', full_name='panzer.MoveTurretRequest.updown', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -121,7 +128,76 @@ _CONTROLREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=115,
-  serialized_end=175,
+  serialized_end=168,
+)
+
+
+_MOVETURRETRESPONSE = _descriptor.Descriptor(
+  name='MoveTurretResponse',
+  full_name='panzer.MoveTurretResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='success', full_name='panzer.MoveTurretResponse.success', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=170,
+  serialized_end=207,
+)
+
+
+_CONTROLREQUEST = _descriptor.Descriptor(
+  name='ControlRequest',
+  full_name='panzer.ControlRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='driveRequest', full_name='panzer.ControlRequest.driveRequest', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='moveTurretRequest', full_name='panzer.ControlRequest.moveTurretRequest', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=209,
+  serialized_end=323,
 )
 
 
@@ -151,8 +227,8 @@ _CONTROLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=177,
-  serialized_end=211,
+  serialized_start=325,
+  serialized_end=359,
 )
 
 
@@ -182,8 +258,8 @@ _PING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=213,
-  serialized_end=233,
+  serialized_start=361,
+  serialized_end=381,
 )
 
 
@@ -213,13 +289,16 @@ _PONG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=235,
-  serialized_end=255,
+  serialized_start=383,
+  serialized_end=403,
 )
 
 _CONTROLREQUEST.fields_by_name['driveRequest'].message_type = _DRIVEREQUEST
+_CONTROLREQUEST.fields_by_name['moveTurretRequest'].message_type = _MOVETURRETREQUEST
 DESCRIPTOR.message_types_by_name['DriveRequest'] = _DRIVEREQUEST
 DESCRIPTOR.message_types_by_name['DriveResponse'] = _DRIVERESPONSE
+DESCRIPTOR.message_types_by_name['MoveTurretRequest'] = _MOVETURRETREQUEST
+DESCRIPTOR.message_types_by_name['MoveTurretResponse'] = _MOVETURRETRESPONSE
 DESCRIPTOR.message_types_by_name['ControlRequest'] = _CONTROLREQUEST
 DESCRIPTOR.message_types_by_name['ControlResponse'] = _CONTROLRESPONSE
 DESCRIPTOR.message_types_by_name['Ping'] = _PING
@@ -239,6 +318,20 @@ DriveResponse = _reflection.GeneratedProtocolMessageType('DriveResponse', (_mess
   # @@protoc_insertion_point(class_scope:panzer.DriveResponse)
   ))
 _sym_db.RegisterMessage(DriveResponse)
+
+MoveTurretRequest = _reflection.GeneratedProtocolMessageType('MoveTurretRequest', (_message.Message,), dict(
+  DESCRIPTOR = _MOVETURRETREQUEST,
+  __module__ = 'panzer_pb2'
+  # @@protoc_insertion_point(class_scope:panzer.MoveTurretRequest)
+  ))
+_sym_db.RegisterMessage(MoveTurretRequest)
+
+MoveTurretResponse = _reflection.GeneratedProtocolMessageType('MoveTurretResponse', (_message.Message,), dict(
+  DESCRIPTOR = _MOVETURRETRESPONSE,
+  __module__ = 'panzer_pb2'
+  # @@protoc_insertion_point(class_scope:panzer.MoveTurretResponse)
+  ))
+_sym_db.RegisterMessage(MoveTurretResponse)
 
 ControlRequest = _reflection.GeneratedProtocolMessageType('ControlRequest', (_message.Message,), dict(
   DESCRIPTOR = _CONTROLREQUEST,
@@ -276,8 +369,8 @@ _PANZER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=258,
-  serialized_end=426,
+  serialized_start=406,
+  serialized_end=645,
   methods=[
   _descriptor.MethodDescriptor(
     name='Drive',
@@ -289,9 +382,18 @@ _PANZER = _descriptor.ServiceDescriptor(
     options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='MoveTurret',
+    full_name='panzer.Panzer.MoveTurret',
+    index=1,
+    containing_service=None,
+    input_type=_MOVETURRETREQUEST,
+    output_type=_MOVETURRETRESPONSE,
+    options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='Control',
     full_name='panzer.Panzer.Control',
-    index=1,
+    index=2,
     containing_service=None,
     input_type=_CONTROLREQUEST,
     output_type=_CONTROLRESPONSE,
@@ -300,7 +402,7 @@ _PANZER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SendPing',
     full_name='panzer.Panzer.SendPing',
-    index=2,
+    index=3,
     containing_service=None,
     input_type=_PING,
     output_type=_PONG,

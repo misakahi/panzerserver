@@ -1,6 +1,8 @@
 import time
 import enum
 
+from panzerserver.watcher import WatchLoop
+
 try:
     from RPi import GPIO
     GPIO.setmode(GPIO.BOARD)  # Use board number
@@ -99,6 +101,10 @@ class Controller(object):
     WATCH_INTERVAL = 1  # msec
     WATCH_THRESHOLD = 3  # msec
 
+    class MethodEnum(enum.Enum):
+        DRIVE = "DRIVE"
+        MOVE_TURRET = "MOVE_TURRET"
+
     def __init__(self,
                  l_channel1, l_channel2, l_pwm,
                  r_channel1, r_channel2, r_pwm,
@@ -109,6 +115,9 @@ class Controller(object):
 
         self.last_updated = 0
         self.is_init = False
+
+        self.watch = WatchLoop()
+        self.watch.set_callback(Controller.MethodEnum.DRIVE, self.stop_drive)
 
     def initialize(self):
         self.l_wheel.initialize()
@@ -126,29 +135,11 @@ class Controller(object):
         self.l_wheel.stop()
         self.r_wheel.stop()
 
-        self.touch()
-
-    def touch(self):
-        """Update last updated time
-        """
-        self.last_updated = time.time()
-
-    @classmethod
-    def watch_configure(cls, threshold):
-        cls.WATCH_INTERVAL = threshold / 3
-        cls.WATCH_THRESHOLD = threshold
-
     def watch_loop(self):
-        self.touch()
-        is_active = True
-        while True:
-            delta = (time.time() - self.last_updated) * 1e3  # milliseconds
-            if is_active and delta > self.WATCH_THRESHOLD:
-                self.stop_all()
-                is_active = False
-            elif delta <= self.WATCH_INTERVAL:
-                is_active = True
-            time.sleep(self.WATCH_INTERVAL / 1e3)  # seconds
+        self.watch.start()
+
+    def set_watch_threshold(self, threshold_msec):
+        self.watch.set_thresold(threshold_msec)
 
     @staticmethod
     def level_to_direction(level):
@@ -165,7 +156,11 @@ class Controller(object):
         self.l_wheel.drive(l_direction, abs(l_level))
         self.r_wheel.drive(r_direction, abs(r_level))
 
-        self.touch()
+        self.watch.record(Controller.MethodEnum.DRIVE)
+
+    def stop_drive(self):
+        self.l_wheel.stop()
+        self.r_wheel.stop()
 
 
 if __name__ == '__main__':
