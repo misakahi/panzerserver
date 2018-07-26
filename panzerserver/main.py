@@ -26,12 +26,14 @@ def main():
     print("config loaded:")
     pprint.pprint(config)
 
+    # init components
+    l_wheel = panzer.Wheel(*config["components"]["left_wheel"])
+    r_wheel = panzer.Wheel(*config["components"]["right_wheel"])
+    turret = panzer.Turret(*config["components"]["turret"])
+
     # Setup controller
     print("setting up controller")
-    controller = panzer.Controller(
-        *config["components"]["left_wheel"],
-        *config["components"]["right_wheel"],
-    )
+    controller = panzer.Controller(l_wheel, r_wheel, turret)
     controller.initialize()
     controller.set_watch_threshold(config["watch_threshold"])
     executor.submit(controller.watch_loop)  # start watch loop

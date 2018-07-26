@@ -11,7 +11,8 @@ stub = panzerserver.panzer_pb2_grpc.PanzerStub(channel)
 for i in range(10):
     if i % 2 == 0:
         request = panzerserver.panzer_pb2.ControlRequest(
-            driveRequest=panzerserver.panzer_pb2.DriveRequest(left_level=1)
+            driveRequest=panzerserver.panzer_pb2.DriveRequest(left_level=1),
+            moveTurretRequest=panzerserver.panzer_pb2.MoveTurretRequest(rotation=1),
         )
     else:
         request = panzerserver.panzer_pb2.ControlRequest()

@@ -62,7 +62,7 @@ setup(
         "grpcio==1.11.0",
         "grpcio-tools",
         "fake-rpi",
-        "pyyaml",
+        "pyyaml==3.13",
     ],
     cmdclass={"protoc": Protoc}
 )

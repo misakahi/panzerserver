@@ -17,8 +17,8 @@ service Panzer {
 }
 
 message DriveRequest {
-   double left_level = 1;    // [-1,1]
-   double right_level = 2;    // [-1,1]
+   double left_level = 1;   // [-1,1]
+   double right_level = 2;  // [-1,1]
 }
 
 message DriveResponse {
@@ -26,8 +26,8 @@ message DriveResponse {
 }
 
 message MoveTurretRequest {
-    double rotation = 1;    // rorate turret. positive=counterclockwise
-    double updown = 2;      // move barrel
+    double rotation = 1;    // [-1,1] - rorate turret. positive=counterclockwise
+    double updown = 2;      // [-1,1] - move barrel
 }
 
 message MoveTurretResponse {
