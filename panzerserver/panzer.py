@@ -37,6 +37,8 @@ class DriveDirection(enum.Enum):
 
 class Wheel(Component):
 
+    PWM_FREQUENCY = 50    # Hz
+
     def __init__(self, channel1, channel2, channel_pwm=None):
         super(Wheel, self).__init__()
 
@@ -54,7 +56,7 @@ class Wheel(Component):
         GPIO.setup(self.channel2, GPIO.OUT)
         if self.channel_pwm is not None:
             GPIO.setup(self.channel_pwm, GPIO.OUT)
-            self.pwm = GPIO.PWM(self.channel_pwm, 1000)  # TODO check frequency
+            self.pwm = GPIO.PWM(self.channel_pwm, self.PWM_FREQUENCY)  # TODO check frequency
 
     def pwm_start(self, level):
         """Start PWM

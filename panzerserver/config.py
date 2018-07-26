@@ -3,9 +3,9 @@ import yaml
 
 DEFAULT_CONFIG = {
     "components": {
-        "left_wheel": [5, 22, None],
-        "right_wheel": [6, 26, None],
-        "turret": [27, 17, None, None],
+        "left_wheel": [16, 19, 13],
+        "right_wheel": [26, 20, 21],
+        "turret": [25, 5, 6, None],  # TODO update pin numbers
     },
     "watch_threshold": 200
 }
@@ -36,7 +36,7 @@ def load_config(file):
     return overrides_dict(get_default(), overrides)
 
 
-if __name__ == '__main__':
+def _test():
     # testing overrides_dict
     d = {
         "a": [1, 2],
@@ -53,3 +53,7 @@ if __name__ == '__main__':
         }
     }
     print(overrides_dict(d, o))
+
+
+if __name__ == '__main__':
+    _test()
