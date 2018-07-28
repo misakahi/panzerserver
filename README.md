@@ -46,3 +46,9 @@ optional arguments:
   --port PORT      port number (default: 50051)
   --config CONFIG  config file (optional)
 ```
+
+特に、設定ファイルを渡すことができます。
+
+```
+sudo python3 -m panzerserver.main --config config.yml
+```
