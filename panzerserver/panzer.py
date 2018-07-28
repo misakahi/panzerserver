@@ -3,6 +3,7 @@ import enum
 import functools
 
 from panzerserver.watcher import WatchLoop
+import panzerserver.util as _util
 
 try:
     from RPi import GPIO
@@ -22,6 +23,8 @@ class Component(object):
         self._is_initialized = False
 
     def initialize(self):
+        """Do override me
+        """
         self._is_initialized = True
 
     def is_initialized(self):
@@ -119,21 +122,49 @@ class Motor(Component):
             self.stop()
 
 
+class Servo(Component):
+    """TODO 角度を指定する
+    """
+
+    def __init__(self, channel_pwm, frequency=50):
+        super(Servo, self).__init__()
+        self.channel_pwm = channel_pwm
+        self.pwm = None  # initialized later
+        self.frequency = frequency
+        self._running = False
+        self.duty = None
+
+    def initialize(self):
+        super(Servo, self).initialize()
+        GPIO.setup(self.channel_pwm, GPIO.OUT)
+        self.pwm = GPIO.PWM(self.channel_pwm, self.frequency)
+
+    def move(self, duty):
+        print("servo %f" % duty)
+        self.duty = duty
+        if not self._running:
+            self.pwm.start(duty)
+        else:
+            self.pwm.ChangeDutyCycle(duty)
+
+
 class Turret(Component):
 
     def __init__(self,
                  channel1, channel2, pwm,
-                 servo):
+                 servo_pwm, barrel_speed=0.001, duty_min=0.05, duty_max=0.06):
         super(Turret, self).__init__()
 
         self.rot = Motor(channel1, channel2, pwm)
-        self.servo = servo
+        self.servo = Servo(servo_pwm)
+        self.barrel_speed = barrel_speed
+        self.duty_range = (duty_min, duty_max)
 
     def initialize(self):
         super(Turret, self).initialize()
 
         self.rot.initialize()
-        # TODO servo
+        self.servo.initialize()
 
     def rotate(self, val):
         """Rotate turret
@@ -154,11 +185,22 @@ class Turret(Component):
     def updown(self, val):
         """Up/Down the barrel
 
-        :param val:
+        -1 -> 60deg dury=0.06
+        +1 -> 45deg duty=0.05
+
+        :param val: [-1, 1]
         :return:
         """
-        # TODO implement updown barrel
-        pass
+        # when first time to move servo, set the mid position
+        if self.servo.duty is None:
+            self.servo.duty = sum(self.duty_range) / len(self.duty_range)
+
+        delta = -1 * _util.within(val, -1, 1) * self.barrel_speed
+
+        new_duty = self.servo.duty + delta
+        new_duty = _util.within(new_duty, *self.duty_range)
+
+        self.servo.move(new_duty)
 
     def stop(self):
         self.rot.stop()

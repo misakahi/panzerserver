@@ -5,7 +5,10 @@ DEFAULT_CONFIG = {
     "components": {
         "left_wheel": [16, 19, 13],
         "right_wheel": [26, 20, 21],
-        "turret": [25, 5, 6, None],  # TODO update pin numbers
+        "turret": [
+            25, 5, 6,               # motor
+            2, 0.001, 0.05, 0.06    # servo
+        ],
     },
     "watch_threshold": 200
 }

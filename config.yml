@@ -1,5 +1,14 @@
 components:
   left_wheel: [16, 19, 13]
   right_wheel: [26, 20, 21]
-  turret: [25, 5, 6, null]
+  turret: [
+    # motor
+    25, 5, 6,
+
+    # barrel
+    2,     # servo PWM channel
+    0.001, # speed scale
+    0.05,  # duty min
+    0.06,  # duty max
+  ]
 watch_threshold: 200
