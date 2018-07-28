@@ -35,12 +35,12 @@ class DriveDirection(enum.Enum):
     BRAKE = 3
 
 
-class Wheel(Component):
+class Motor(Component):
 
     PWM_FREQUENCY = 50    # Hz
 
     def __init__(self, channel1, channel2, channel_pwm=None):
-        super(Wheel, self).__init__()
+        super(Motor, self).__init__()
 
         self.channel1 = channel1
         self.channel2 = channel2
@@ -49,7 +49,7 @@ class Wheel(Component):
         self.is_pwm_active = False
 
     def initialize(self):
-        super(Wheel, self).initialize()
+        super(Motor, self).initialize()
 
         print("setup GPIO OUT %d %d" % (self.channel1, self.channel2))
         GPIO.setup(self.channel1, GPIO.OUT)
@@ -126,7 +126,7 @@ class Turret(Component):
                  servo):
         super(Turret, self).__init__()
 
-        self.rot = Wheel(channel1, channel2, pwm)
+        self.rot = Motor(channel1, channel2, pwm)
         self.servo = servo
 
     def initialize(self):
@@ -248,8 +248,8 @@ class Controller(Component):
 def _main():
     import concurrent.futures
 
-    l_wheel = Wheel(1,2,None)
-    r_wheel = Wheel(3,4,None)
+    l_wheel = Motor(1, 2, None)
+    r_wheel = Motor(3, 4, None)
     turret = Turret(5,6,7,8)
     con = Controller(l_wheel, r_wheel, turret)
     con.initialize()
