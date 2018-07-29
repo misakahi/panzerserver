@@ -16,8 +16,7 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
 
     def MoveTurret(self, request, context):
         print(request)
-        self.controller.turret.rotate(request.rotation)
-        self.controller.turret.updown(request.updown)
+        self.controller.move_turret(request.rotation, request.updown)
 
         return panzer_pb2.MoveTurretResponse(success=True)
 

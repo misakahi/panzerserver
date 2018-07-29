@@ -7,7 +7,7 @@ DEFAULT_CONFIG = {
         "right_wheel": [26, 20, 21],
         "turret": [
             25, 5, 6,               # motor
-            2, 0.001, 0.05, 0.06    # servo
+            18, 0.001, 0.05, 0.06    # servo
         ],
     },
     "watch_threshold": 200

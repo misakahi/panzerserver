@@ -131,22 +131,18 @@ class Servo(Component):
         self.channel_pwm = channel_pwm
         self.pwm = None  # initialized later
         self.frequency = frequency
-        self._running = False
         self.duty = None
 
     def initialize(self):
         super(Servo, self).initialize()
         GPIO.setup(self.channel_pwm, GPIO.OUT)
         self.pwm = GPIO.PWM(self.channel_pwm, self.frequency)
+        self.pwm.start(0)
 
     def move(self, duty):
         print("servo %f" % duty)
         self.duty = duty
-        if not self._running:
-            self._running = True
-            self.pwm.start(duty)
-        else:
-            self.pwm.ChangeDutyCycle(duty)
+        self.pwm.ChangeDutyCycle(duty)
 
 
 class Turret(Component):

@@ -64,6 +64,7 @@ class WatchLoop(object):
                 # Check elapsed from last updated. Run callback only when flag is true,
                 # otherwise callback runs every time.
                 if is_callback_active[tag] and delta > self._threshold:
+                    print("watch callback delta={} threshold={} tag={}".format(delta, self._threshold, tag))
                     self.run_callback(tag)
                     is_callback_active[tag] = False
                 elif delta <= self._threshold:
@@ -74,7 +75,7 @@ class WatchLoop(object):
         self._is_active = False
 
 
-if __name__ == '__main__':
+def _test():
     import concurrent.futures
 
     watch = WatchLoop(100)
@@ -93,3 +94,5 @@ if __name__ == '__main__':
     watch.stop()
 
 
+if __name__ == '__main__':
+    _test()
