@@ -143,6 +143,7 @@ class Servo(Component):
         print("servo %f" % duty)
         self.duty = duty
         if not self._running:
+            self._running = True
             self.pwm.start(duty)
         else:
             self.pwm.ChangeDutyCycle(duty)
