@@ -34,8 +34,8 @@ def main():
     pprint.pprint(config)
 
     # init components
-    l_wheel = panzer.Wheel(*config["components"]["left_wheel"])
-    r_wheel = panzer.Wheel(*config["components"]["right_wheel"])
+    l_wheel = panzer.Motor(*config["components"]["left_wheel"])
+    r_wheel = panzer.Motor(*config["components"]["right_wheel"])
     turret = panzer.Turret(*config["components"]["turret"])
 
     # Setup controller

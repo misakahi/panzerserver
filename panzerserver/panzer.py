@@ -3,6 +3,7 @@ import enum
 import functools
 
 from panzerserver.watcher import WatchLoop
+import panzerserver.util as _util
 
 try:
     from RPi import GPIO
@@ -22,6 +23,8 @@ class Component(object):
         self._is_initialized = False
 
     def initialize(self):
+        """Do override me
+        """
         self._is_initialized = True
 
     def is_initialized(self):
@@ -35,12 +38,12 @@ class DriveDirection(enum.Enum):
     BRAKE = 3
 
 
-class Wheel(Component):
+class Motor(Component):
 
     PWM_FREQUENCY = 50    # Hz
 
     def __init__(self, channel1, channel2, channel_pwm=None):
-        super(Wheel, self).__init__()
+        super(Motor, self).__init__()
 
         self.channel1 = channel1
         self.channel2 = channel2
@@ -49,7 +52,7 @@ class Wheel(Component):
         self.is_pwm_active = False
 
     def initialize(self):
-        super(Wheel, self).initialize()
+        super(Motor, self).initialize()
 
         print("setup GPIO OUT %d %d" % (self.channel1, self.channel2))
         GPIO.setup(self.channel1, GPIO.OUT)
@@ -119,21 +122,49 @@ class Wheel(Component):
             self.stop()
 
 
+class Servo(Component):
+    """TODO 角度を指定する
+    """
+
+    def __init__(self, channel_pwm, frequency=50):
+        super(Servo, self).__init__()
+        self.channel_pwm = channel_pwm
+        self.pwm = None  # initialized later
+        self.frequency = frequency
+        self._running = False
+        self.duty = None
+
+    def initialize(self):
+        super(Servo, self).initialize()
+        GPIO.setup(self.channel_pwm, GPIO.OUT)
+        self.pwm = GPIO.PWM(self.channel_pwm, self.frequency)
+
+    def move(self, duty):
+        print("servo %f" % duty)
+        self.duty = duty
+        if not self._running:
+            self.pwm.start(duty)
+        else:
+            self.pwm.ChangeDutyCycle(duty)
+
+
 class Turret(Component):
 
     def __init__(self,
                  channel1, channel2, pwm,
-                 servo):
+                 servo_pwm, barrel_speed=0.001, duty_min=0.05, duty_max=0.06):
         super(Turret, self).__init__()
 
-        self.rot = Wheel(channel1, channel2, pwm)
-        self.servo = servo
+        self.rot = Motor(channel1, channel2, pwm)
+        self.servo = Servo(servo_pwm)
+        self.barrel_speed = barrel_speed
+        self.duty_range = (duty_min, duty_max)
 
     def initialize(self):
         super(Turret, self).initialize()
 
         self.rot.initialize()
-        # TODO servo
+        self.servo.initialize()
 
     def rotate(self, val):
         """Rotate turret
@@ -154,11 +185,22 @@ class Turret(Component):
     def updown(self, val):
         """Up/Down the barrel
 
-        :param val:
+        -1 -> 60deg dury=0.06
+        +1 -> 45deg duty=0.05
+
+        :param val: [-1, 1]
         :return:
         """
-        # TODO implement updown barrel
-        pass
+        # when first time to move servo, set the mid position
+        if self.servo.duty is None:
+            self.servo.duty = sum(self.duty_range) / len(self.duty_range)
+
+        delta = -1 * _util.within(val, -1, 1) * self.barrel_speed
+
+        new_duty = self.servo.duty + delta
+        new_duty = _util.within(new_duty, *self.duty_range)
+
+        self.servo.move(new_duty)
 
     def stop(self):
         self.rot.stop()
@@ -248,8 +290,8 @@ class Controller(Component):
 def _main():
     import concurrent.futures
 
-    l_wheel = Wheel(1,2,None)
-    r_wheel = Wheel(3,4,None)
+    l_wheel = Motor(1, 2, None)
+    r_wheel = Motor(3, 4, None)
     turret = Turret(5,6,7,8)
     con = Controller(l_wheel, r_wheel, turret)
     con.initialize()
