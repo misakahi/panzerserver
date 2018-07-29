@@ -71,9 +71,7 @@ class Motor(Component):
             return
 
         # set duty to 0..100
-        duty = int(level * 100)
-        duty = min(duty, 100)
-        duty = max(duty, 0)
+        duty = _util.within(level * 100, 0, 100)
 
         if not self.is_pwm_active:
             self.is_pwm_active = True
@@ -140,9 +138,16 @@ class Servo(Component):
         self.pwm.start(0)
 
     def move(self, duty):
+        """Move servo
+
+        :param duty: 0 <= duty <= 1.0
+        :return:
+        """
         print("servo %f" % duty)
         self.duty = duty
-        self.pwm.ChangeDutyCycle(duty)
+
+        duty_percent = _util.within(duty * 100, 0, 100)
+        self.pwm.ChangeDutyCycle(duty_percent)
 
 
 class Turret(Component):
