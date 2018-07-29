@@ -9,14 +9,18 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
         self.controller = controller
 
     def Drive(self, request, context):
-        print(request)
-        self.controller.drive(request.left_level, request.right_level)
+        if request.left_level == 0 and request.right_level == 0:
+            print("got empty drive request")
+        else:
+            self.controller.drive(request.left_level, request.right_level)
 
         return panzer_pb2.DriveResponse(success=True)
 
     def MoveTurret(self, request, context):
-        print(request)
-        self.controller.move_turret(request.rotation, request.updown)
+        if request.rotation == 0 and request.updown == 0:
+            print("got empty turret request")
+        else:
+            self.controller.move_turret(request.rotation, request.updown)
 
         return panzer_pb2.MoveTurretResponse(success=True)
 
