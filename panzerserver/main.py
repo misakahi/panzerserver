@@ -4,6 +4,13 @@ import time
 import grpc
 import pprint
 
+try:
+    from RPi import GPIO
+    GPIO.setmode(GPIO.BCM)  # Use board number
+except ImportError:
+    import fake_rpi
+    from fake_rpi.RPi import GPIO
+
 from panzerserver import panzer_pb2_grpc, panzer
 from panzerserver.rpc_impl import PanzerServicer
 import panzerserver.config
@@ -37,6 +44,13 @@ def main():
     controller.initialize()
     controller.set_watch_threshold(config["watch_threshold"])
     executor.submit(controller.watch_loop)  # start watch loop
+
+    # Enable motors
+    # TODO remove this hardcodings
+    GPIO.setup(12, GPIO.OUT)
+    GPIO.setup(27, GPIO.OUT)
+    GPIO.output(12, GPIO.HIGH)
+    GPIO.output(27, GPIO.HIGH)
 
     # Setup gRPC server
     print("setting up server")
