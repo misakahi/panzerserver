@@ -1,0 +1,10 @@
+[Unit]
+Description=panzerserver
+
+[Service]
+ExecStart=/usr/bin/python3 -m panzerserver.main
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
