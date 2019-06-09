@@ -32,5 +32,6 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
         return panzer_pb2.DriveResponse(success=True)
 
     def SendPing(self, request, context):
+        print("pingpong")
         return panzer_pb2.Pong()
 
