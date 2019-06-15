@@ -1,4 +1,5 @@
 from panzerserver import panzer_pb2, panzer_pb2_grpc
+import logging
 
 
 class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
@@ -10,28 +11,30 @@ class PanzerServicer(panzer_pb2_grpc.PanzerServicer):
 
     def Drive(self, request, context):
         if request.left_level == 0 and request.right_level == 0:
-            print("got empty drive request")
+            logging.info("got empty drive request")
         else:
+            logging.info(request)
             self.controller.drive(request.left_level, request.right_level)
 
         return panzer_pb2.DriveResponse(success=True)
 
     def MoveTurret(self, request, context):
         if request.rotation == 0 and request.updown == 0:
-            print("got empty turret request")
+            logging.info("got empty turret request")
         else:
+            logging.info(request)
             self.controller.move_turret(request.rotation, request.updown)
 
         return panzer_pb2.MoveTurretResponse(success=True)
 
     def Control(self, request, context):
-        print(request)
+        logging.info(request)
         self.Drive(request.driveRequest, context)
         self.MoveTurret(request.moveTurretRequest, context)
 
         return panzer_pb2.DriveResponse(success=True)
 
     def SendPing(self, request, context):
-        print("pingpong")
-        return panzer_pb2.Pong()
+        logging.info(f"ping: {request.ping}")
+        return panzer_pb2.Pong(pong=request.ping)
 

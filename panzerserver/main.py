@@ -2,7 +2,6 @@ import argparse
 from concurrent import futures
 import time
 import grpc
-import pprint
 
 try:
     from RPi import GPIO
@@ -14,6 +13,10 @@ except ImportError:
 from panzerserver import panzer_pb2_grpc, panzer
 from panzerserver.rpc_impl import PanzerServicer
 import panzerserver.config
+
+import logging
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)-15s - %(levelname)-5s - %(filename)s(%(lineno)s) - %(message)s")
 
 
 def main():
@@ -30,8 +33,7 @@ def main():
         config = panzerserver.config.DEFAULT_CONFIG
     else:
         config = panzerserver.config.load_config(args.config)
-    print("config loaded:")
-    pprint.pprint(config)
+    logging.info("config loaded:")
 
     # init components
     l_wheel = panzer.Motor(*config["components"]["left_wheel"])
@@ -39,7 +41,7 @@ def main():
     turret = panzer.Turret(*config["components"]["turret"])
 
     # Setup controller
-    print("setting up controller")
+    logging.info("setting up controller")
     controller = panzer.Controller(l_wheel, r_wheel, turret)
     controller.initialize()
     controller.set_watch_threshold(config["watch_threshold"])
@@ -53,14 +55,14 @@ def main():
     GPIO.output(27, GPIO.HIGH)
 
     # Setup gRPC server
-    print("setting up server")
+    logging.info("setting up server")
     server = grpc.server(executor)
     panzer_pb2_grpc.add_PanzerServicer_to_server(PanzerServicer(controller), server)
     address = '[::]:%d' % args.port
     server.add_insecure_port(address)
     server.start()
 
-    print("server has started %s" % address)
+    logging.info("server has started %s" % address)
 
     try:
         while True:
