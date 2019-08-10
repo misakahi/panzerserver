@@ -61,8 +61,12 @@ setup(
     install_requires=[
         "grpcio==1.11.0",
         "grpcio-tools",
-        "fake-rpi",
         "pyyaml>=4.2b1",
     ],
+    extras_require={
+        "develop": [
+            "fake-rpi",
+        ]
+    },
     cmdclass={"protoc": Protoc}
 )

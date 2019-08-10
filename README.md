@@ -52,3 +52,13 @@ optional arguments:
 ```
 sudo python3 -m panzerserver.main --config config.yml
 ```
+
+# Develop
+
+開発はリポジトリをクローンし、`-e`オプション付きでインストールします。
+
+```
+$ git clone https://github.com/misakahi/panzerserver
+$ cd panzerserver
+$ pip install -e .[develop]
+```
