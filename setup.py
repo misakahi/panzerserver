@@ -59,7 +59,7 @@ setup(
     author_email='',
     description='',
     install_requires=[
-        "grpcio==1.11.0",
+        "grpcio==1.53.0",
         "grpcio-tools",
         "pyyaml>=4.2b1",
     ],
